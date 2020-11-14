@@ -1,0 +1,56 @@
+version: '3'
+services:
+  laravel-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: laravel
+    container_name: laravel-web
+    restart: unless-stopped
+    tty: true
+    env_file:
+      - .env.laravel
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: prod
+    # working_dir: /var/www/html/laravel-app
+    volumes:
+      - ./app-data:/var/www/html/laravel-app
+    networks:
+      - laravel-net
+
+  db:
+    image: mysql:5.7
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    env_file:
+      - .env.db
+    volumes:
+      - db-data:/var/lib/mysql/
+    networks:
+      - laravel-net
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./app:/var/www/html/laravel-app
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./nginx/ssl/:/etc/nginx/ssl/
+    networks:
+      - laravel-net
+
+networks:
+  laravel-net:
+    driver: bridge
+
+volumes:
+  app-data:
+  db-data:
+    driver: local

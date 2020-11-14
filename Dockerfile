@@ -30,13 +30,13 @@ RUN mkdir -p /home/$user/.composer && \
 
 RUN addgroup -g 1000 laravel && adduser -G laravel -g laravel -s /bin/bash -D laravel
 
-# Set working directory
-WORKDIR /var/www/html/
-
 RUN composer create-project --prefer-dist laravel/laravel laravel-app
 
 # RUN chown laravel:laravel /var/www/html/laravel-app
 
 EXPOSE 9000
+
+# Set working directory
+WORKDIR /var/www/html/laravel-app
 
 USER $user

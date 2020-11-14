@@ -18,7 +18,7 @@ services:
       SERVICE_TAGS: prod
     # working_dir: /var/www/html/laravel-app
     volumes:
-      - ./app-data:/var/www/html/laravel-app
+      - ./app:/var/www/html/laravel-app
     networks:
       - laravel-net
 
@@ -30,11 +30,11 @@ services:
     env_file:
       - .env.db
     volumes:
-      - db-data:/var/lib/mysql/
+      - db:/var/lib/mysql/
     networks:
       - laravel-net
 
-  nginx:
+  webserver:
     image: nginx:alpine
     container_name: nginx
     restart: unless-stopped
@@ -49,11 +49,23 @@ services:
     networks:
       - laravel-net
 
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+    depends_on:
+      - webserver
+    command: certonly --webroot --webroot-path=/var/www/html --email admin@example.com --agree-tos --no-eff-email --staging -d example.com
+    # command: certonly --webroot --webroot-path=/var/www/html --email sammy@example.com --agree-tos --no-eff-email --force-renewal -d example.com -d www.example.com
+
 networks:
   laravel-net:
     driver: bridge
 
 volumes:
-  app-data:
-  db-data:
+  app:
+  db:
     driver: local

@@ -34,3 +34,18 @@ RUN composer create-project --prefer-dist laravel/laravel laravel-app
 WORKDIR /var/www/html/laravel-app
 
 USER $user
+
+# Use supervisord instead of direct run for Nginx and PHP
+COPY ./conf/supervisord.conf /etc/supervisord.conf
+
+# PHP-FPM basic config file
+COPY ./conf/fpm.conf /usr/local/etc/php-fpm.d/www.conf
+
+# Adding startup script for Nginx and PHP
+COPY ./entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Exposing ports
+EXPOSE 80 443 9000
+
+CMD ["/entrypoint.sh"]

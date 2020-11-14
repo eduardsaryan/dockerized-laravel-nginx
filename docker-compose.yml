@@ -2,6 +2,9 @@ version: '3'
 services:
   laravel-web:
     build:
+      args:
+        user: laravel
+        uid: 1000
       context: .
       dockerfile: Dockerfile
     image: laravel
@@ -37,8 +40,8 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "80:80"
-      - "443:443"
+      - 80:80
+      - 443:443
     volumes:
       - ./app:/var/www/html/laravel-app
       - ./nginx/conf.d/:/etc/nginx/conf.d/

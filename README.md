@@ -1,2 +1,1 @@
-# dockerized-laravel-nginx
-Dockerized Laravel with Nginx
+### Dockerized Laravel with Nginx

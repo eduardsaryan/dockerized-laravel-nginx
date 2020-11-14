@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 services:
   laravel-web:
     build:
@@ -68,4 +68,7 @@ networks:
 volumes:
   app:
   db:
+  certbot-etc:
+  certbot-var:
+  web-root:
     driver: local

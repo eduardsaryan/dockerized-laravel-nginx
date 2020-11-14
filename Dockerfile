@@ -28,13 +28,7 @@ RUN useradd -G www-data,root -u $uid -d /home/$user $user
 RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
 
-RUN addgroup -g 1000 laravel && adduser -G laravel -g laravel -s /bin/bash -D laravel
-
 RUN composer create-project --prefer-dist laravel/laravel laravel-app
-
-# RUN chown laravel:laravel /var/www/html/laravel-app
-
-EXPOSE 9000
 
 # Set working directory
 WORKDIR /var/www/html/laravel-app

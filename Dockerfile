@@ -20,6 +20,12 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
+# Install Nginx and other necessary libraries
+RUN apt-get update && apt-get install -y --no-install-recommends nginx supervisor libpng-dev libjpeg-dev libjpeg62-turbo libmcrypt4 libmcrypt-dev libcurl3-dev libxml2-dev libxslt-dev libicu-dev \
+    && \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 # Create directory for SSL files
 RUN mkdir /etc/nginx/ssl
 

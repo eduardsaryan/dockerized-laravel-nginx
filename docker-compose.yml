@@ -10,6 +10,9 @@ services:
     image: laravel
     container_name: laravel-web
     restart: unless-stopped
+    tty: true
+    ports:
+      - 8800:80
     working_dir: /var/www/html/laravel-app
     env_file:
       - .env.laravel
@@ -18,6 +21,7 @@ services:
     #  SERVICE_TAGS: prod
     volumes:
       - ./app:/var/www/html/laravel-app
+      - ./conf/laravel.conf:/etc/nginx/conf.d/laravel.conf
     networks:
       - laravel-net
 
@@ -33,19 +37,19 @@ services:
     networks:
       - laravel-net
 
-  webserver:
-    image: nginx:alpine
-    container_name: webserver
-    restart: unless-stopped
-    tty: true
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ./app:/var/www/html/laravel-app
-      - ./conf/laravel.conf:/etc/nginx/conf.d/laravel.conf
-    networks:
-      - laravel-net
+  # webserver:
+  #  image: nginx:alpine
+  #  container_name: webserver
+  #  restart: unless-stopped
+  #  tty: true
+  #  ports:
+  #    - 80:80
+  #    - 443:443
+  #  volumes:
+  #    - ./app:/var/www/html/laravel-app
+  #    - ./conf/laravel.conf:/etc/nginx/conf.d/laravel.conf
+  #  networks:
+  #    - laravel-net
 
   certbot:
     image: certbot/certbot

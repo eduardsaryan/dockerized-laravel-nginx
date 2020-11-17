@@ -33,4 +33,6 @@ RUN composer create-project --prefer-dist laravel/laravel laravel-app
 # Set working directory
 WORKDIR /var/www/html/laravel-app
 
+EXPOSE 9000
+
 USER $user

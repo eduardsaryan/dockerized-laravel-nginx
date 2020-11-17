@@ -20,14 +20,6 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Install Nginx and other necessary libraries
-# RUN apt-get update && apt-get install -y --no-install-recommends nginx supervisor libpng-dev libjpeg-dev libjpeg62-turbo libmcrypt4 libmcrypt-dev libcurl3-dev libxml2-dev libxslt-dev libicu-dev && \
-#    apt-get clean && \
-#    rm -rf /var/lib/apt/lists/*
-
-# Create directory for SSL files
-RUN mkdir /etc/nginx/ssl
-
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -42,18 +34,3 @@ RUN composer create-project --prefer-dist laravel/laravel laravel-app
 WORKDIR /var/www/html/laravel-app
 
 USER $user
-
-# Use supervisord instead of direct run for Nginx and PHP
-# COPY ./conf/supervisord.conf /etc/supervisord.conf
-
-# PHP-FPM basic config file
-# COPY ./conf/fpm.conf /usr/local/etc/php-fpm.d/www.conf
-
-# Adding startup script for Nginx and PHP
-#COPY ./entrypoint.sh /entrypoint.sh
-#RUN chmod +x /entrypoint.sh
-
-# Exposing ports
-# EXPOSE 80 443 9000
-
-# CMD ["/entrypoint.sh"]

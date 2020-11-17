@@ -10,15 +10,14 @@ services:
     image: laravel
     container_name: laravel-web
     restart: unless-stopped
+    working_dir: /var/www/html/laravel-app
     env_file:
       - .env.laravel
-    environment:
-      SERVICE_NAME: app
-      SERVICE_TAGS: prod
+    # environment:
+    #  SERVICE_NAME: app
+    #  SERVICE_TAGS: prod
     volumes:
       - ./app:/var/www/html/laravel-app
-      - ./conf/laravel.conf:/etc/nginx/conf.d/laravel.conf
-      # - ./conf/laravel-ssl.conf:/etc/nginx/conf.d/laravel.conf
     networks:
       - laravel-net
 

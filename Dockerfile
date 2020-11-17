@@ -28,10 +28,15 @@ RUN useradd -G www-data,root -u $uid -d /home/$user $user
 RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
 
-RUN composer create-project --prefer-dist laravel/laravel laravel-app
+#USER $user
+
+#RUN  composer global require laravel/installer && \
+#     echo 'export PATH="$HOME/.config/composer/vendor/bin:$PATH"' >> ~/.bashrc && \
+
+# RUN composer create-project --prefer-dist laravel/laravel laravel-app
 
 # Set working directory
-WORKDIR /var/www/html/laravel-app
+# WORKDIR /var/www/html/laravel-app
 
 EXPOSE 9000
 

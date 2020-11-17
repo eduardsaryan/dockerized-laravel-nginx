@@ -40,19 +40,20 @@ services:
     networks:
       - laravel-net
 
-  # webserver:
-    # image: nginx:alpine
-    # container_name: nginx
-    # restart: unless-stopped
-    # tty: true
-    # ports:
-    #  - 80:80
-    #  - 443:443
-    # volumes:
-    #  - ./app:/var/www/html/laravel-app
-    #  - ./conf/laravel.conf:/etc/nginx/conf.d/laravel.conf
-    #networks:
-    #  - laravel-net
+  webserver:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./ssl:/etc/nginx/ssl
+      - ./app:/var/www/html/laravel-app
+      - ./conf/laravel.conf:/etc/nginx/conf.d/laravel.conf
+    networks:
+      - laravel-net
 
   certbot:
     image: certbot/certbot
@@ -64,8 +65,9 @@ services:
       - ./ssl:/etc/letsencrypt/live/example.com
     depends_on:
       - laravel-web
-    command: certonly --webroot --webroot-path=/var/www/html/laravel-web --email laravel@example.com --agree-tos --no-eff-email --staging -d example.com
-    # command: certonly --webroot --webroot-path=/var/www/html --email laravel@example.com --agree-tos --no-eff-email --force-renewal -d example.com
+    command: certonly --webroot --webroot-path=/etc/nginx/ssl --email laravel@example.com --agree-tos --no-eff-email --staging -d example.com
+    # command: certonly --webroot --webroot-path=/var/www/html/laravel-web --email laravel@example.com --agree-tos --no-eff-email --staging -d example.com
+    # command: certonly --webroot --webroot-path=/var/www/html/laravel-web --email laravel@example.com --agree-tos --no-eff-email --force-renewal -d example.com
 
 networks:
   laravel-net:
